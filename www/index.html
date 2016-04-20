@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src &apos;self&apos; data: gap: https://ssl.gstatic.com &apos;unsafe-eval&apos;; style-src &apos;self&apos; &apos;unsafe-inline&apos;; media-src *">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
+    <style>
+        /* For avoiding title truncation in wp8 */
+        .ui-header .ui-title {
+            overflow: visible !important;
+        }
+
+        /* For fixing the absolute position issue for the default cordova gen page*/
+        #cjp-accordion1 .app {
+            left: 5px !important;
+            margin: 5px !important;
+            position: relative !important;
+        }
+    </style>
+    <title>Hello World</title>
+</head>
+<body>
+<div class="app">
+    <div class="logo">
+        <img src="img/logo.jpg" alt="">
+    </div>
+
+    <div class="page" id="list">
+        <div id="wordList" role="main" class="ui-content word-list">
+            <div data-role="collapsible">
+                <h3>Exportlexikon</h3>
+
+                <div class="list-content">
+                    <div class="search">
+                        <form action="#" id="searchForm">
+                            <input type="search" name="search-1" id="searchInput" value="">
+                            <input class="" type="submit" value="Suchen">
+                        </form>
+                    </div>
+
+                    <div class="letters">
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                        <span class="letter">A</span>
+                    </div>
+
+                    <div id="words" class="words">
+                        <div class="word">
+                            <div class="title moreInfo">
+                                Title
+                            </div>
+                            <div class="description moreInfo">
+                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
+                                bw lorem iwq jnewa iolweuf wah bw
+                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
+                                bw lorem iwq jnewa iolweuf wah bw
+                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
+                                bw lorem iwq jnewa iolweuf wah bw
+                            </div>
+                            <div class="links">
+                                <a href="">IHK-Finder</a>
+                            </div>
+                        </div>
+
+                        <div class="word">
+                            <div class="title">
+                                Title
+                            </div>
+                            <div class="description">
+                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
+                                bw lorem iwq jnewa iolweuf wah bw
+                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
+                                bw lorem iwq jnewa iolweuf wah bw
+                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
+                                bw lorem iwq jnewa iolweuf wah bw
+                            </div>
+                            <div class="links">
+                                <a href="">IHK-Finder</a>
+                                <a href="">Video</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page hidden details" id="details">
+        <div class="back">
+            <a href="" class="button-back" data-inline="true" data-role="button" data-icon="arrow-l" id="detailsBack">Back</a>
+        </div>
+        <div class="title" id="detailsTitle">
+            Title
+        </div>
+
+        <div class="description" id="detailsDesc">
+            Description normal Description normal Description normal Description normalDescription normalDescription
+            normalDescription normal
+        </div>
+
+        <div class="description" id="detailsDescFull">
+            Description fullDescription fullDescription fullDescription fullDescription fullDescription fullDescription
+            fullDescription full
+        </div>
+
+        <div class="links" id="detailsLinks">
+            <a href="">IHK-Finder</a>
+            <a href="">Video</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.1.min.js" id="cordova-jquery"></script>
+<script type="text/javascript" id="jqm-trans-disable">
+    /* For having a faster transition */
+    $(document).on("mobileinit", function () {
+        $.mobile.defaultPageTransition = "none";
+        $.mobile.defaultDialogTransition = "none";
+    });
+</script>
+<script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
