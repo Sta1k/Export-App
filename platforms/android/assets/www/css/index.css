@@ -19,37 +19,39 @@
 * {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
-
+html{
+    height: 100%;
+}
 body {
     -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
     -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color: #E4E4E4;
-    background-image: linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image: -webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image: -ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-color: #FFFFFF;
+    background-image: linear-gradient(top, #A7A7A7 0%, #ffffff 51%);
+    background-image: -webkit-linear-gradient(top, #A7A7A7 0%, #ffffff 51%);
+    background-image: -ms-linear-gradient(top, #A7A7A7 0%, #ffffff 51%);
     background-image: -webkit-gradient(
             linear,
             left top,
             left bottom,
             color-stop(0, #A7A7A7),
-            color-stop(0.51, #E4E4E4)
+            color-stop(0.51, #ffffff)
     );
     background-attachment: fixed;
     font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
-    font-size: 12px;
+    font-size: 12px !important;
     height: 100%;
     margin: 0px;
     padding: 0px;
-    text-transform: uppercase;
     width: 100%;
 }
 
 div.logo {
-    width: 100%;
+    width: 70%;
 }
 
 div.logo img {
+    padding: 15px 0 9px 12px;
     width: 100%;
     height: auto;
 }
@@ -58,7 +60,7 @@ div.ui-content.word-list a.ui-collapsible-heading-toggle {
     border: 0;
     border-radius: 0;
     background: none repeat scroll 0 0 #014F8D;
-    color: #fff;
+    color: #ffffff;
     text-shadow: none;
     box-shadow: none;
 }
@@ -76,7 +78,7 @@ div.word-list div.list-content, div.details {
 }
 
 div.letters {
-    background-color: #e9eef0;
+    background-color: #FFFFFF;
     height: 40px;
     line-height: 40px;
     width: 100%;
@@ -86,8 +88,17 @@ div.letters {
 
 div.letters > span.letter {
     border: 1px solid #ccc;
-    padding: 3px 5px;
+    width: 27px;
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
     color: #6a6b66;
+    display: inline-block;
+}
+
+div.letters > span.letter.active {
+    color: #ffffff;
+    background: none repeat scroll 0 0 #014F8D;
 }
 
 div.letters > span.letter:first-child {
@@ -106,7 +117,7 @@ div.ui-collapsible-content.ui-body-inherit {
     border-radius: 0;
 }
 
-div.search {
+div.search, div.new-word {
     padding: 0 5px;
 }
 
@@ -122,7 +133,7 @@ div.description {
 }
 
 div.word, div.details {
-    font-size: 14px;
+    font-size: 14px !important;
     border-bottom: 1px solid;
     border-color: #ccc;
     padding: 20px 10px;
@@ -146,4 +157,89 @@ a.button-back {
     background-color: #014F8D !important;
     text-shadow: none !important;
     color: #fff !important;
+}
+
+a.site-link {
+    display: block;
+    font-size: 16px !important;
+    width: 100%;
+    background: #014F8D;
+    text-decoration: none;
+    color: #fff !important;
+    text-shadow: none;
+    padding: .7em 1em;
+    padding-right: 2.5em;
+    margin: 0;
+    box-shadow: none;
+}
+
+a.site-link.link-white {
+    background-color: transparent;
+    border-bottom: 1px solid #014F8D;
+    color: #6a6b66 !important;
+}
+
+div.word-list .ui-btn-icon-right:after {
+    background-position-x: 100%;
+    border-left: 1px solid #1D639A;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background-color: transparent;
+    top: 25%;
+    height: 100%;
+}
+.footer{
+    height:80px;
+
+    margin: 3%;
+}
+div.footer {
+    background: #ffffff;
+
+}
+
+div.footer .left {
+    width: 45%;
+    float: left;
+}
+
+div.footer .right {
+    width: 20%;
+    text-align: right;
+    float: right;
+}
+
+form.search-form div.ui-btn, form.new-word-form div.ui-btn {
+    background-color: #FFFFFF !important;
+    color: #004f8d !important;
+}
+
+div.description span {
+    font-size: 14px !important;
+}
+
+.text-blue {
+    color: #004f8d !important;
+}
+
+div.search-error {
+    padding: 10px 5px 20px;
+}
+.ui-btn.ui-input-btn.ui-corner-all.ui-shadow.ui-focus {
+    text-shadow: 0 0 0 #ffffff;
+}
+
+.ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
+    width: 30px;
+    right: 1em;
+    margin-top: -9px;
+}
+
+.cont{
+
+    min-height: calc(100vh - 120px);
+}
+.ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
+    background-color: #FFFFFF;
 }

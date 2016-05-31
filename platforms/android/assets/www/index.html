@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src &apos;self&apos; data: gap: https://ssl.gstatic.com &apos;unsafe-eval&apos;; style-src &apos;self&apos; &apos;unsafe-inline&apos;; media-src *">
+
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport"
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <meta charset="UTF-8">
+
     <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <style>
         /* For avoiding title truncation in wp8 */
         .ui-header .ui-title {
@@ -22,122 +23,74 @@
             position: relative !important;
         }
     </style>
-    <title>Hello World</title>
+    <title>Export app</title>
 </head>
-<body>
-<div class="app">
-    <div class="logo">
+<body class="hidden">
+<div class="app" id="appContainer">
+
+    <div class="cont">
+        <div class="logo">
         <img src="img/logo.jpg" alt="">
     </div>
-
-    <div class="page" id="list">
-        <div id="wordList" role="main" class="ui-content word-list">
-            <div data-role="collapsible">
+        <div role="main" class="ui-content word-list">
+            <div style="margin: 0" data-role="collapsible" data-iconpos="right">
                 <h3>Exportlexikon</h3>
 
                 <div class="list-content">
                     <div class="search">
-                        <form action="#" id="searchForm">
+                        <form action="#" id="searchForm" class="search-form">
                             <input type="search" name="search-1" id="searchInput" value="">
-                            <input class="" type="submit" value="Suchen">
+                            <input class="submit-button" type="submit" value="Suchen">
                         </form>
                     </div>
 
-                    <div class="letters">
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
-                        <span class="letter">A</span>
+                    <div class="letters" id="letters"></div>
+
+                    <div class="page" id="list">
+                        <div id="words" class="words"></div>
+                    </div>
+                    <div class="page hidden details" id="detailsContainer">
+                        <div class="back">
+                            <a href="" class="button-back" data-inline="true" data-role="button" data-icon="arrow-l"
+                               id="detailsBack">Zur&uuml;ck</a>
+                        </div>
+                        <div id="details"></div>
                     </div>
 
-                    <div id="words" class="words">
-                        <div class="word">
-                            <div class="title moreInfo">
-                                Title
-                            </div>
-                            <div class="description moreInfo">
-                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
-                                bw lorem iwq jnewa iolweuf wah bw
-                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
-                                bw lorem iwq jnewa iolweuf wah bw
-                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
-                                bw lorem iwq jnewa iolweuf wah bw
-                            </div>
-                            <div class="links">
-                                <a href="">IHK-Finder</a>
-                            </div>
-                        </div>
-
-                        <div class="word">
-                            <div class="title">
-                                Title
-                            </div>
-                            <div class="description">
-                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
-                                bw lorem iwq jnewa iolweuf wah bw
-                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
-                                bw lorem iwq jnewa iolweuf wah bw
-                                lorem iwq jnewa iolweuf wah bw lorem iwq jnewa iolweuf wah bwlorem iwq jnewa iolweuf wah
-                                bw lorem iwq jnewa iolweuf wah bw
-                            </div>
-                            <div class="links">
-                                <a href="">IHK-Finder</a>
-                                <a href="">Video</a>
-                            </div>
-                        </div>
+                    <div class="new-word">
+                    <span class="text-blue">
+                    Ihnen fehlt ein Begriff? Geben Sie diesen hier ein, und wir werden ihn gerne in das
+                    Exportlexikon aufnehmen.
+                    </span>
+                        <form action="" id="newWord" class="new-word-form">
+                            <input placeholder="Begriff eingeben" type="text" name="newWord">
+                            <input class="submit-button" type="submit" value="Absenden">
+                        </form>
                     </div>
                 </div>
             </div>
+            <a href="http://export-app.de/#1" class="site-link externalLink">L&auml;nder und Statistiken</a>
+            <a href="http://export-app.de/#2" class="site-link externalLink">News</a>
+            <a href="http://export-app.de/#3" class="site-link externalLink">Veranstaltungen / Seminare</a>
+            <a href="http://export-app.de/#4" class="site-link externalLink">N&uuml;tzliche Links</a>
+            <a href="http://export-app.de/#5" class="site-link externalLink">Datenbank Zolldienstleister</a>
+            <a href="http://export-app.de/#6" class="site-link externalLink">My IHK</a>
+            <a href="http://export-app.de/#7" class="site-link externalLink link-white">Ansprechpartner</a>
+            <a href="http://export-app.de/#8" class="site-link externalLink link-white">IHKs</a>
+            <a href="http://export-app.de/#9" class="site-link externalLink link-white">Partner</a>
         </div>
     </div>
+    <div class="footer">
+        <img src="img/footer.png" alt="footer">
 
-    <div class="page hidden details" id="details">
-        <div class="back">
-            <a href="" class="button-back" data-inline="true" data-role="button" data-icon="arrow-l" id="detailsBack">Back</a>
-        </div>
-        <div class="title" id="detailsTitle">
-            Title
-        </div>
-
-        <div class="description" id="detailsDesc">
-            Description normal Description normal Description normal Description normalDescription normalDescription
-            normalDescription normal
-        </div>
-
-        <div class="description" id="detailsDescFull">
-            Description fullDescription fullDescription fullDescription fullDescription fullDescription fullDescription
-            fullDescription full
-        </div>
-
-        <div class="links" id="detailsLinks">
-            <a href="">IHK-Finder</a>
-            <a href="">Video</a>
+        <div class="subfooter">
+            <div class="left">
+                Copyright © 2016 IHK-Exportakademie GmbH
+            </div>
+            <div class="right">
+                <a href="http://www.ihk-exportakademie.de/Anmeldung/AGB/">AGB</a> |
+                <a href="http://www.ihk-exportakademie.de/Impressum/">Impressum</a>
+            </div>
         </div>
     </div>
 </div>
