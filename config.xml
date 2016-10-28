@@ -25,6 +25,9 @@
         <allow-intent href="itms:*"/>
         <allow-intent href="itms-apps:*"/>
         <preference name="DisallowOverscroll" value="true" />
+        <preference name="StatusBarOverlaysWebView" value="false"/>
+        <preference name="StatusBarBackgroundColor" value="#004f8d"/>
+        <preference name="StatusBarStyle" value="blackopaque" />
     </platform>
     <preference name="Orientation" value="portrait"/>
 </widget>

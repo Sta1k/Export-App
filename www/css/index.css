@@ -233,7 +233,7 @@ div.search-error {
 .ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
     width: 30px;
     right: 1em;
-    margin-top: -9px;
+    /*margin-top: -9px;*/
 }
 
 .cont{
@@ -242,4 +242,18 @@ div.search-error {
 }
 .ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
     background-color: #FFFFFF;
+}
+.ui-input-search.ui-input-has-clear .ui-btn.ui-input-clear, .ui-input-text.ui-input-has-clear .ui-btn.ui-input-clear {
+    position: absolute;
+    right: 0;
+    top: 60%;
+    margin: -16px .3125em 0;
+    border: 0;
+    background-color: transparent;
+}
+.ui-btn-icon-notext {
+    width: 2.75em;
+}
+.ui-btn-icon-left {
+    padding-left: 2.7em;
 }
