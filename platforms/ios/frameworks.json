@@ -2,5 +2,10 @@
     "AudioToolbox.framework": 1,
     "SystemConfiguration.framework": 1,
     "CoreTelephony.framework": 1,
-    "QuartzCore.framework": 1
+    "QuartzCore.framework": 2,
+    "UIKit.framework": 1,
+    "Foundation.framework": 2,
+    "ImageIO.framework": 1,
+    "MessageUI.framework": 1,
+    "QuickLook.framework": 1
 }

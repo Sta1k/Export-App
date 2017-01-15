@@ -1,4 +1,5 @@
 var app = {
+    manufacturer: '',
     dataService: '',
     apiUrl: 'http://export-app.de/api/?q=list',
     letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
@@ -10,6 +11,7 @@ var app = {
     bindEvents: function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         //window.addEventListener('load', this.onDeviceReady, false);
+
 
         var wordsContainer = $('#words');
         $('#words, #detailsContainer').on('click', 'div.description a', function (e) {
@@ -39,7 +41,29 @@ var app = {
                 ['Ok', 'Zurück']     // buttonLabels
             );
         });
+        $("li.lightblue a").click(function () {
+            $(this).next("ul .sub-menu").toggle();
+        });
 
+
+        function success() {
+            console.log('Success');
+        }
+
+        function error(code) {
+            if (code === 1) {
+                console.log('No file handler found', code);
+            } else {
+                console.log('Undefined error', code);
+            }
+        }
+
+
+        $('body').on('click', '.pdf', function (e) {
+            e.preventDefault();
+            cordova.plugins.disusered.open(this.href, success, error);
+            console.log(this.href)
+        });
         $('#letters').on('click', '.letter', function () {
             var letterId = $(this).data('letterid');
             app.updateView(letterId);
@@ -107,6 +131,7 @@ var app = {
                 ['Ok', 'Zurück']     // buttonLabels
             );
         });
+
     },
     onConfirm: function (buttonIndex) {
         if (buttonIndex != 1) {
@@ -117,6 +142,7 @@ var app = {
     },
     onDeviceReady: function () {
         app.initDb();
+        app.manufacturer = device.manufacturer;
         $('body').removeClass('hidden');
     },
 
@@ -175,14 +201,13 @@ var app = {
                                 tx.executeSql('DELETE FROM words');
                             }
                             for (var i in data.words) {
-                                
-
                                 if (!!data.words[i].youtube && !data.words[i].external_link) {
                                     var link = data.words[i].youtube;
                                     var cornerlink = link.substr(38, 41);
                                     data.words[i].external_link = cornerlink;
 
                                 }
+                                // if(data.words[i].id==307)console.log(data.words[i]);
                                 var insert = [
                                     data.words[i].id,
                                     data.words[i].exportlexikon_headline,
@@ -192,7 +217,8 @@ var app = {
                                     data.words[i].youtube,
                                     data.words[i].video,
                                     data.words[i].partner,
-                                    data.words[i].external_link
+                                    data.words[i].external_link//,
+                                    // data.words[i].pdf
                                 ];
                                 tx.executeSql('INSERT OR REPLACE INTO words (id, title, desc_short, desc_full, letter, youtube, video, partner, external_link) VALUES(?,?,?,?,?,?,?,?,?)', insert);
                             }
@@ -200,9 +226,10 @@ var app = {
                             tx.executeSql('INSERT OR REPLACE INTO settings (name, value) VALUES(?, ?)', ['last_updated', currentTime.toString()]);
                             tx.executeSql('DROP TABLE IF EXISTS wordstmp');
                         }, function (tx, err) {
+                            console.log('db error ' + err);
                             tx.executeSql('DELETE FROM words');
                             tx.executeSql('INSERT INTO words SELECT * FROM wordstmp');
-                            console.log('db error ' + err);
+
                         }, function (tx) {
 
                             window.plugins.toast.showLongTop('Die Datenbank wurde upgedatet.');
@@ -284,6 +311,22 @@ var app = {
             console.log('db error ' + err);
         });
     },
+    openPdf: function () {
+        // e.preventDefault();
+        function pdfSuccess() {
+            console.log('Success');
+        }
+
+        function pdfError(code) {
+            if (code === 1) {
+                console.log('No file handler found');
+            } else {
+                console.log('Undefined error');
+            }
+        }
+
+        cordova.plugins.disusered.open('http://export-app.de/uploaded/5-Fragen-an_Brasilien_1.pdf', pdfSuccess, pdfError)
+    },
 
     openDetails: function (id) {
         if (!app.isDbReady) {
@@ -291,30 +334,75 @@ var app = {
         }
 
         this.db.transaction(function (tx) {
-            tx.executeSql('SELECT * FROM words WHERE id = ?', [id],
-                function (tx, data) {
-                    console.log(data);
-                    if (data.rows.length) {
-                        var word = data.rows.item(0);
+                tx.executeSql('SELECT * FROM words WHERE id = ?', [id],
+                    function (tx, data) {
+                        //console.log(data);
+                        if (data.rows.length) {
+                            var word = data.rows.item(0);
+                            var reg = word.desc_full.match(/\S*\.pdf/);
+                            if (reg !== null) {
+                                console.log('BLOCK WITH Replace', "Index : ", reg.index);
+                                startElement = 'class="pdf" onclick="app.openPdf()"';
+                                // var newV = [workStr.slice(0, reg.index), startElement, workStr.slice(reg.index)].join('');
 
-                        $.get('views/_wordDetails.html', function (template) {
-                            var detailsContainer = $('#details');
-                            detailsContainer.html('');
-                            var block = $(template).clone();
-                            block.find('div#detailsTitle').text(word.title);
-                            block.find('div#detailsDesc').html(word.desc_short);
-                            block.find('div#detailsDescFull').html(word.desc_full);
-                            if (word.external_link) {
-                                block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
+                                var newV = word.desc_full.replace('href="/uploaded/5-Fragen-an_Brasilien_1.pdf" target="_blank"', startElement);
+                                $.get('views/_wordDetails.html', function (template) {
+                                    var detailsContainer = $('#details');
+                                    detailsContainer.html('');
+                                    var block = $(template).clone();
+                                    block.find('div#detailsTitle').text(word.title);
+                                    block.find('div#detailsDesc').html(word.desc_short);
+
+                                    block.find('div#detailsDescFull').html(newV);
+                                    // if (word.pdf) {
+                                    //     var pdfLinks = JSON.parse(word.pdf);
+                                    //     for (var i = 0; i < pdfLinks.length; i++) {
+                                    //         block.find('div#pdf').append($('<a href="' + pdfLinks[i].url + '" class="externalLink">' + pdfLinks[i].name + '</a>'));
+                                    //     }
+                                    //
+                                    // }
+                                    if (word.external_link) {
+                                        block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
+                                    }
+                                    block.find('div.back>a').button();
+                                    detailsContainer.append(block);
+                                    app.openPage('.page#detailsContainer');
+                                    window.scrollTo(0, 0);
+                                });
+                            } else {
+                                console.log('without replace');
+                                $.get('views/_wordDetails.html', function (template) {
+                                    var detailsContainer = $('#details');
+                                    detailsContainer.html('');
+                                    var block = $(template).clone();
+                                    block.find('div#detailsTitle').text(word.title);
+                                    block.find('div#detailsDesc').html(word.desc_short);
+
+                                    block.find('div#detailsDescFull').html(word.desc_full);
+                                    // if (word.pdf) {
+                                    //     var pdfLinks = JSON.parse(word.pdf);
+                                    //     for (var i = 0; i < pdfLinks.length; i++) {
+                                    //         block.find('div#pdf').append($('<a href="' + pdfLinks[i].url + '" class="externalLink">' + pdfLinks[i].name + '</a>'));
+                                    //     }
+                                    //
+                                    // }
+                                    if (word.external_link) {
+                                        block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
+                                    }
+                                    block.find('div.back>a').button();
+                                    detailsContainer.append(block);
+                                    app.openPage('.page#detailsContainer');
+                                    window.scrollTo(0, 0);
+                                });
                             }
-                            block.find('div.back>a').button();
-                            detailsContainer.append(block);
-                            app.openPage('.page#detailsContainer');
-                            window.scrollTo(0, 0);
-                        });
-                    }
-                });
-        });
+
+
+                            // if(navigator.platform.indexOf('ios'))
+
+                        }
+                    });
+            }
+        );
     }
 };
 

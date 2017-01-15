@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="ihk.export.app" version="1.2" xmlns="http://www.w3.org/ns/widgets"
+<widget id="ihk.export.app" version="1.8" xmlns="http://www.w3.org/ns/widgets"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Export App</name>
     <description>
         Die Export-App der IHKs bietet kompaktes Wissen im Bereich Außenhandel.
     </description>
-    <author email="contact@smissltd.com" href="http://cordova.io">
+    <author email="contact@smissltd.com" href="http://smissltd.com">
         SMISS ltd
     </author>
     <content src="index.html"/>
@@ -30,4 +30,5 @@
         <preference name="StatusBarStyle" value="blackopaque" />
     </platform>
     <preference name="Orientation" value="portrait"/>
+    <allow-navigation href="*://export-app.de/*" />
 </widget>

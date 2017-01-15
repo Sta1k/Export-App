@@ -131,7 +131,39 @@ div.description {
     color: #5b5b5b;
     text-align: justify;
 }
+li.lightblue.white {
+    /* padding-left: 30px; */
+    width: auto;
+}
+.lightblue {
+    background: #69B8DF !important;
+    border-top: .5em solid #69B8DF!important;
+}
+li.white a{
+    text-decoration: none;
+    color: #fff;
+    font: menu ;
 
+}
+li.white a:active,
+li.white a:hover{
+    color: white;
+}
+ul{
+    list-style-type: none;
+}
+.submenu a{
+    text-decoration: none;
+}
+
+.sub-menu {
+    background: #69B8DF !important;
+    margin: 0;
+    padding: 0 0 0 5%;
+}
+.sub-menu:last-child{
+    padding-bottom: 2%;
+}
 div.word, div.details {
     font-size: 14px !important;
     border-bottom: 1px solid;

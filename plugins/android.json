@@ -24,7 +24,26 @@
         },
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "ihk.export.app"
+        },
+        "cordova-plugin-document-viewer": {
+            "PACKAGE_NAME": "ihk.export.app"
+        },
+        "cordova-open": {
+            "PACKAGE_NAME": "ihk.export.app"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "ihk.export.app"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "ihk.export.app"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "ihk.export.app"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "ihk.export.app"
+        }
+    }
 }
