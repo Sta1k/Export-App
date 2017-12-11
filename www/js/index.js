@@ -4,6 +4,7 @@ var app = {
     apiUrl: 'http://export-app.de/api/?q=list',
     letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
     db: null,
+    pdf: [],
     isDbReady: false,
     initialize: function () {
         this.bindEvents();
@@ -45,7 +46,11 @@ var app = {
             $(this).next("ul .sub-menu").toggle();
         });
 
-
+        $(document).on('click', 'p a.pdf', function (e) {
+            e.preventDefault();
+            console.log('works');
+            app.openPdf(this.href)
+        });
         function success() {
             console.log('Success');
         }
@@ -59,11 +64,6 @@ var app = {
         }
 
 
-        $('body').on('click', '.pdf', function (e) {
-            e.preventDefault();
-            cordova.plugins.disusered.open(this.href, success, error);
-            console.log(this.href)
-        });
         $('#letters').on('click', '.letter', function () {
             var letterId = $(this).data('letterid');
             app.updateView(letterId);
@@ -131,6 +131,12 @@ var app = {
                 ['Ok', 'Zurück']     // buttonLabels
             );
         });
+        // $('body').on('click', '.pdf',  function (e) {
+        //     e.preventDefault();
+        //     console.log(e.target.href);
+        //     cordova.plugins.disusered.open(e.target.href, success, error);
+        //
+        // });
 
     },
     onConfirm: function (buttonIndex) {
@@ -155,10 +161,12 @@ var app = {
         this.db = window.openDatabase("words", "1.0", "Words DB", 20 * 1024 * 1024);
 
         this.db.transaction(function (tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY, title, desc_short, desc_full, letter, youtube, video, partner, external_link)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY, title, desc_short, desc_full, letter, youtube, video, partner, external_link,pdf)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS settings (name PRIMARY KEY, value)');
         }, function (tx, err) {
+            tx.executeSql('DROP TABLE IF EXISTS words');
             console.log('db error ' + err);
+            app.initDb();
         }, function () {
             app.isDbReady = true;
             if (navigator.connection.type != 'none') {
@@ -186,7 +194,7 @@ var app = {
             $.ajax({
                 url: app.apiUrl,
                 type: 'post',
-                data: {time: 0},
+                data: { time: 0 },
                 dataType: 'json',
                 success: function (data) {
                     var currentDate = new Date().getTime() - time;
@@ -195,16 +203,22 @@ var app = {
                     if (currentDate >= 3600) {
                         app.db.transaction(function (tx) {
                             if (data.words.length > 0) {
-                                tx.executeSql('CREATE TABLE IF NOT EXISTS wordstmp (id INTEGER PRIMARY KEY, title, desc_short, desc_full, letter, youtube, video, partner, external_link)');
-                                tx.executeSql('DELETE FROM wordstmp');
-                                tx.executeSql('INSERT INTO wordstmp SELECT * FROM words');
-                                tx.executeSql('DELETE FROM words');
+                                // tx.executeSql('CREATE TABLE IF NOT EXISTS wordstmp (id INTEGER PRIMARY KEY, title, desc_short, desc_full, letter, youtube, video, partner, external_link,pdf)');
+                                // tx.executeSql('DELETE FROM wordstmp');
+                                // tx.executeSql('INSERT INTO wordstmp SELECT * FROM words');
+                                tx.executeSql('DROP TABLE IF EXISTS words');
+                                tx.executeSql('CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY, title, desc_short, desc_full, letter, youtube, video, partner, external_link,pdf)');
                             }
                             for (var i in data.words) {
                                 if (!!data.words[i].youtube && !data.words[i].external_link) {
                                     var link = data.words[i].youtube;
                                     var cornerlink = link.substr(38, 41);
                                     data.words[i].external_link = cornerlink;
+                                }
+                                if (data.words[i].pdf.length) {
+                                    for (var j = 0; j < data.words[i].pdf.length; j++) {
+                                        app.pdf.push(data.words[i].pdf[j].url)
+                                    }
 
                                 }
                                 // if(data.words[i].id==307)console.log(data.words[i]);
@@ -217,10 +231,10 @@ var app = {
                                     data.words[i].youtube,
                                     data.words[i].video,
                                     data.words[i].partner,
-                                    data.words[i].external_link//,
-                                    // data.words[i].pdf
+                                    data.words[i].external_link,
+                                    JSON.stringify(data.words[i].pdf)
                                 ];
-                                tx.executeSql('INSERT OR REPLACE INTO words (id, title, desc_short, desc_full, letter, youtube, video, partner, external_link) VALUES(?,?,?,?,?,?,?,?,?)', insert);
+                                tx.executeSql('INSERT OR REPLACE INTO words (id, title, desc_short, desc_full, letter, youtube, video, partner, external_link,pdf) VALUES(?,?,?,?,?,?,?,?,?,?)', insert);
                             }
                             var currentTime = new Date().getTime();
                             tx.executeSql('INSERT OR REPLACE INTO settings (name, value) VALUES(?, ?)', ['last_updated', currentTime.toString()]);
@@ -229,7 +243,7 @@ var app = {
                             console.log('db error ' + err);
                             tx.executeSql('DELETE FROM words');
                             tx.executeSql('INSERT INTO words SELECT * FROM wordstmp');
-
+                            /*need to add info about err with update db*/
                         }, function (tx) {
 
                             window.plugins.toast.showLongTop('Die Datenbank wurde upgedatet.');
@@ -296,6 +310,7 @@ var app = {
                                     if (item.external_link) {
                                         block.find('div.links').append($('<a href="' + item.external_link + '" class="externalLink">Video</a>'));
                                     }
+
                                     block.data('id', item.id);
                                     $('#words').append(block);
                                 }
@@ -311,7 +326,7 @@ var app = {
             console.log('db error ' + err);
         });
     },
-    openPdf: function () {
+    openPdf: function (url) {
         // e.preventDefault();
         function pdfSuccess() {
             console.log('Success');
@@ -321,12 +336,61 @@ var app = {
             if (code === 1) {
                 console.log('No file handler found');
             } else {
-                console.log('Undefined error');
+                console.log('Undefined error', code);
             }
         }
-
-        cordova.plugins.disusered.open('http://export-app.de/uploaded/5-Fragen-an_Brasilien_1.pdf', pdfSuccess, pdfError)
-    },
+        console.log(url)
+        var fileTransfer = new FileTransfer(),
+            args = {
+                uri: encodeURI(url),
+                name: url.substr(url.lastIndexOf('/') + 1),
+                //  statusDom=document.getElementById("ft-prog")
+                targetPath: cordova.file.externalDataDirectory + url.substr(url.lastIndexOf('/') + 1)
+            }
+        console.log(args)
+        // fileTransfer.onprogress = function (progressEvent) {
+        //     if (progressEvent.lengthComputable) {
+        //         var perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+        //         statusDom.value = perc + "% loaded...";
+        //         console.log(perc);
+        //     } else {
+        //         if (statusDom.innerHTML == "") {
+        //             statusDom.innerHTML = "Loading";
+        //         } else {
+        //             statusDom.innerHTML += ".";
+        //         }
+        //     }
+        // };
+        fileTransfer.download(
+            args.uri,
+            args.targetPath,
+            function (entry) {
+                console.log("download complete: " + entry.toInternalURL());
+                window.resolveLocalFileSystemURL(args.targetPath, function (entry) {
+                    cordova.plugins.fileOpener2.open(
+                       entry.toInternalURL(),
+                         'application/pdf', {
+                             error: function (e) {
+                                 console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
+                             },
+                             success: function () {
+                                 console.log('file opened successfully');
+                             }
+                         }
+                    );
+                }, function (e) {
+                    console.log('File Not Found');
+                });
+            },
+            function (error) {
+                console.log("download error source " + error.source);
+                console.log("download error target " + error.target);
+                console.log("upload error code" + error.code);
+            },
+            true,
+            args.options
+  );
+},
 
     openDetails: function (id) {
         if (!app.isDbReady) {
@@ -334,74 +398,45 @@ var app = {
         }
 
         this.db.transaction(function (tx) {
-                tx.executeSql('SELECT * FROM words WHERE id = ?', [id],
-                    function (tx, data) {
-                        //console.log(data);
-                        if (data.rows.length) {
-                            var word = data.rows.item(0);
-                            var reg = word.desc_full.match(/\S*\.pdf/);
-                            if (reg !== null) {
-                                console.log('BLOCK WITH Replace', "Index : ", reg.index);
-                                startElement = 'class="pdf" onclick="app.openPdf()"';
-                                // var newV = [workStr.slice(0, reg.index), startElement, workStr.slice(reg.index)].join('');
+            tx.executeSql('SELECT * FROM words WHERE id = ?', [id],
+                function (tx, data) {
+                    //console.log(data);
+                    if (data.rows.length) {
+                        var word = data.rows.item(0);
+                        console.log('without replace');
+                        $.get('views/_wordDetails.html', function (template) {
+                            var detailsContainer = $('#details');
+                            detailsContainer.html('');
+                            var block = $(template).clone();
+                            block.find('div#detailsTitle').text(word.title);
+                            block.find('div#detailsDesc').html(word.desc_short);
 
-                                var newV = word.desc_full.replace('href="/uploaded/5-Fragen-an_Brasilien_1.pdf" target="_blank"', startElement);
-                                $.get('views/_wordDetails.html', function (template) {
-                                    var detailsContainer = $('#details');
-                                    detailsContainer.html('');
-                                    var block = $(template).clone();
-                                    block.find('div#detailsTitle').text(word.title);
-                                    block.find('div#detailsDesc').html(word.desc_short);
+                            block.find('div#detailsDescFull').html(word.desc_full);
+                            console.log(word);
+                            if (JSON.parse(word.pdf).length > 0) {
+                                // console.log(word.pdf);
+                                var pdfArr = JSON.parse(word.pdf);
+                                console.log(pdfArr);
+                                // var pdfLinks = word.pdf.split(',');
 
-                                    block.find('div#detailsDescFull').html(newV);
-                                    // if (word.pdf) {
-                                    //     var pdfLinks = JSON.parse(word.pdf);
-                                    //     for (var i = 0; i < pdfLinks.length; i++) {
-                                    //         block.find('div#pdf').append($('<a href="' + pdfLinks[i].url + '" class="externalLink">' + pdfLinks[i].name + '</a>'));
-                                    //     }
-                                    //
-                                    // }
-                                    if (word.external_link) {
-                                        block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
-                                    }
-                                    block.find('div.back>a').button();
-                                    detailsContainer.append(block);
-                                    app.openPage('.page#detailsContainer');
-                                    window.scrollTo(0, 0);
-                                });
-                            } else {
-                                console.log('without replace');
-                                $.get('views/_wordDetails.html', function (template) {
-                                    var detailsContainer = $('#details');
-                                    detailsContainer.html('');
-                                    var block = $(template).clone();
-                                    block.find('div#detailsTitle').text(word.title);
-                                    block.find('div#detailsDesc').html(word.desc_short);
+                                for (var i = 0; i < pdfArr.length; i++) {
+                                    // block.find('div#pdf').append($('<p><a class="pdf" href="'+encodeURI(pdfArr[i].url)+'">' + pdfArr[i].name + '</a></p>'));
+                                    block.find('div#pdf').append($('<p><a class="pdf" href="' + pdfArr[i].url + '">' + pdfArr[i].name + '</a></p>'));
+                                }
 
-                                    block.find('div#detailsDescFull').html(word.desc_full);
-                                    // if (word.pdf) {
-                                    //     var pdfLinks = JSON.parse(word.pdf);
-                                    //     for (var i = 0; i < pdfLinks.length; i++) {
-                                    //         block.find('div#pdf').append($('<a href="' + pdfLinks[i].url + '" class="externalLink">' + pdfLinks[i].name + '</a>'));
-                                    //     }
-                                    //
-                                    // }
-                                    if (word.external_link) {
-                                        block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
-                                    }
-                                    block.find('div.back>a').button();
-                                    detailsContainer.append(block);
-                                    app.openPage('.page#detailsContainer');
-                                    window.scrollTo(0, 0);
-                                });
                             }
+                            if (word.external_link) {
+                                block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
+                            }
+                            block.find('div.back>a').button();
+                            detailsContainer.append(block);
+                            app.openPage('.page#detailsContainer');
+                            window.scrollTo(0, 0);
+                        });
 
-
-                            // if(navigator.platform.indexOf('ios'))
-
-                        }
-                    });
-            }
+                    }
+                });
+        }
         );
     }
 };

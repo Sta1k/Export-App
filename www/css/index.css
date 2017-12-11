@@ -127,9 +127,12 @@ div.title {
     margin-bottom: 20px;
 }
 
-div.description {
+div.description,div.desc-pdf {
     color: #5b5b5b;
     text-align: justify;
+}
+.desc-pdf p a.pdf{
+    text-decoration: none;
 }
 li.lightblue.white {
     /* padding-left: 30px; */
@@ -247,7 +250,7 @@ form.search-form div.ui-btn, form.new-word-form div.ui-btn {
     color: #004f8d !important;
 }
 
-div.description span {
+div.description span,div.desc-pdf span {
     font-size: 14px !important;
 }
 

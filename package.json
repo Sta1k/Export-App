@@ -1,0 +1,19 @@
+{
+  "name": "ihk.export.app",
+  "version": "1.9.2",
+  "displayName": "Export App",
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-file-opener2": {}
+    }
+  },
+  "dependencies": {
+    "cordova-android": "~6.2.3",
+    "cordova-plugin-file-opener2": "^2.0.19",
+    "cordova-plugin-whitelist": "1"
+  }
+}
