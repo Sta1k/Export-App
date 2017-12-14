@@ -375,10 +375,10 @@ var app = {
             args.uri,
             args.targetPath,
             function (entry) {
-                console.log("download complete: " + entry.toInternalURL());
+                console.log("download complete: " + entry.toURL());
                 window.resolveLocalFileSystemURL(args.targetPath, function (entry) {
                     cordova.plugins.fileOpener2.open(
-                        entry.toInternalURL(),
+                        entry.toURL(),
                         'application/pdf', {
                             error: function (e) {
                                 $.mobile.loading("hide");
