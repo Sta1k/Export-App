@@ -342,12 +342,12 @@ var app = {
         });
     },
     openPdf: function (url) {
-        var tp;
-        if (app.platform == 'iOS') {
-            tp = cordova.file.cacheDirectory + url.substr(url.lastIndexOf('/') + 1)
-        } else {
-            tp = cordova.file.externalDataDirectory + url.substr(url.lastIndexOf('/') + 1)
-        }
+        // var tp;
+        // if (app.platform == 'iOS') {
+        //     tp = cordova.file.cacheDirectory + url.substr(url.lastIndexOf('/') + 1)
+        // } else {
+        //     tp = cordova.file.externalDataDirectory + url.substr(url.lastIndexOf('/') + 1)
+        // }
         // e.preventDefault();
         function pdfSuccess() {
             console.log('Success');
@@ -360,50 +360,51 @@ var app = {
                 console.log('Undefined error', code);
             }
         }
-        console.log(app.platform)
+        // console.log(app.platform)
         
-        var fileTransfer = new FileTransfer(),
+        // var fileTransfer = new FileTransfer(),
 
-            args = {
-                uri: encodeURI(url),
-                name: url.substr(url.lastIndexOf('/') + 1),
-                //  statusDom=document.getElementById("ft-prog")
-                targetPath: tp
-            }
-        console.log(args)
-        fileTransfer.download(
-            args.uri,
-            args.targetPath,
-            function (entry) {
-                console.log("download complete: " + entry.toURL());
-                window.resolveLocalFileSystemURL(args.targetPath, function (entry) {
-                    cordova.plugins.fileOpener2.open(
-                        entry.toURL(),
-                        'application/pdf', {
-                            error: function (e) {
-                                $.mobile.loading("hide");
-                                console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
-                            },
-                            success: function () {
-                                $.mobile.loading("hide");
-                                console.log('file opened successfully');
-                            }
-                        }
-                    );
-                }, function (e) {
-                    $.mobile.loading("hide");
-                    console.log('File Not Found');
-                });
-            },
-            function (error) {
-                $.mobile.loading("hide");
-                console.log("download error source " + error.source);
-                console.log("download error target " + error.target);
-                console.log("upload error code" + error.code);
-            },
-            true,
-            args.options
-        );
+        //     args = {
+        //         uri: encodeURI(url),
+        //         name: url.substr(url.lastIndexOf('/') + 1),
+        //         //  statusDom=document.getElementById("ft-prog")
+        //         targetPath: tp
+        //     }
+        // console.log(args)
+        // fileTransfer.download(
+        //     args.uri,
+        //     args.targetPath,
+        //     function (entry) {
+        //         console.log("download complete: " + entry.toURL());
+        //         window.resolveLocalFileSystemURL(args.targetPath, function (entry) {
+        //             cordova.plugins.fileOpener2.open(
+        //                 entry.toURL(),
+        //                 'application/pdf', {
+        //                     error: function (e) {
+        //                         $.mobile.loading("hide");
+        //                         console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
+        //                     },
+        //                     success: function () {
+        //                         $.mobile.loading("hide");
+        //                         console.log('file opened successfully');
+        //                     }
+        //                 }
+        //             );
+        //         }, function (e) {
+        //             $.mobile.loading("hide");
+        //             console.log('File Not Found');
+        //         });
+        //     },
+        //     function (error) {
+        //         $.mobile.loading("hide");
+        //         console.log("download error source " + error.source);
+        //         console.log("download error target " + error.target);
+        //         console.log("upload error code" + error.code);
+        //     },
+        //     true,
+        //     args.options
+        // );
+        cordova.plugins.disusered.open(url, pdfSuccess, pdfError)
     },
 
     openDetails: function (id) {

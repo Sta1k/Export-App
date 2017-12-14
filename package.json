@@ -8,12 +8,14 @@
     ],
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-file-opener2": {}
+      "cordova-plugin-file-opener2": {},
+      "cordova-open": {}
     }
   },
   "dependencies": {
     "cordova-android": "~6.2.3",
     "cordova-plugin-file-opener2": "^2.0.19",
-    "cordova-plugin-whitelist": "1"
+    "cordova-plugin-whitelist": "1",
+    "cordova-open": "~1.0.12"
   }
 }
