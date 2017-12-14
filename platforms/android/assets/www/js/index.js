@@ -1,4 +1,5 @@
 var app = {
+    platform:'',
     manufacturer: '',
     dataService: '',
     apiUrl: 'http://export-app.de/api/?q=list',
@@ -162,6 +163,7 @@ var app = {
     onDeviceReady: function () {
         app.initDb();
         app.manufacturer = device.manufacturer;
+        app.platform=device.platform;
         $('body').removeClass('hidden');
     },
 
@@ -340,6 +342,12 @@ var app = {
         });
     },
     openPdf: function (url) {
+        var tp;
+        if (app.platform == 'iOS') {
+            tp = cordova.file.cacheDirectory + url.substr(url.lastIndexOf('/') + 1)
+        } else {
+            tp = cordova.file.externalDataDirectory + url.substr(url.lastIndexOf('/') + 1)
+        }
         // e.preventDefault();
         function pdfSuccess() {
             console.log('Success');
@@ -352,13 +360,15 @@ var app = {
                 console.log('Undefined error', code);
             }
         }
-        console.log(url)
+        console.log(app.platform)
+        
         var fileTransfer = new FileTransfer(),
+
             args = {
                 uri: encodeURI(url),
                 name: url.substr(url.lastIndexOf('/') + 1),
                 //  statusDom=document.getElementById("ft-prog")
-                targetPath: cordova.file.externalDataDirectory + url.substr(url.lastIndexOf('/') + 1)
+                targetPath: tp
             }
         console.log(args)
         fileTransfer.download(
@@ -424,7 +434,7 @@ var app = {
                                 // var pdfLinks = word.pdf.split(',');
                                 var result;
                                 for (var i = 0; i < pdfArr.length; i++) {
-                                    var work=result||word.desc_full;
+                                    var work = result || word.desc_full;
                                     var matched = work.lastIndexOf(pdfArr[i].name + '</a'),
                                         start = work.substring(0, matched),
                                         tale = work.slice(matched + pdfArr[i].name.length + 4),
