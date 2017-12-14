@@ -14,8 +14,9 @@
   },
   "dependencies": {
     "cordova-android": "~6.2.3",
+    "cordova-open": "~1.0.12",
     "cordova-plugin-file-opener2": "^2.0.19",
     "cordova-plugin-whitelist": "1",
-    "cordova-open": "~1.0.12"
+    "jquery-mobile": "^1.5.0-alpha.1"
   }
 }

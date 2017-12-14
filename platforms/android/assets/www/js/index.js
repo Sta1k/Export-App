@@ -46,7 +46,12 @@ var app = {
         $("li.lightblue a").click(function () {
             $(this).next("ul .sub-menu").toggle();
         });
-
+        $( document ).on( "mobileinit", function() {
+            $.mobile.loader.prototype.options.text = "loading";
+            $.mobile.loader.prototype.options.textVisible = false;
+            $.mobile.loader.prototype.options.theme = "a";
+            $.mobile.loader.prototype.options.html = "";
+          });
         $(document).on('click', 'a.pdf', function (e) {
             e.preventDefault();
             var $this = $(this),
@@ -350,15 +355,20 @@ var app = {
         // }
         // e.preventDefault();
         function pdfSuccess() {
+            $('.list-content').css('opacity',1)
+            $('.loader').hide()
             console.log('Success');
         }
 
         function pdfError(code) {
+            $('.list-content').css('opacity',1)
+            $('.loader').hide()
             if (code === 1) {
                 console.log('No file handler found');
             } else {
                 console.log('Undefined error', code);
             }
+            window.plugins.toast.showShortTop("Undefined error")
         }
         // console.log(app.platform)
         
@@ -441,7 +451,7 @@ var app = {
                                         tale = work.slice(matched + pdfArr[i].name.length + 4),
                                         startFind = start.lastIndexOf('<a');
                                     //    console.log(tale)
-                                    result = work.replace(work.substring(startFind, matched + pdfArr[i].name.length + 4), '<a class="pdf" data-textonly="true" data-textvisible="true" data-msgtext="Wird geladen" data-inline="true" href="' + pdfArr[i].url + '">' + pdfArr[i].name + '</a>')
+                                    result = work.replace(work.substring(startFind, matched + pdfArr[i].name.length + 4), '<a class="pdf" data-textonly="false" data-textvisible="true" data-msgtext="Wird geladen" data-inline="true" href="' + pdfArr[i].url + '">' + pdfArr[i].name + '</a>')
 
                                     //    pattern.test(start)
                                     console.log('\n---->', result)
@@ -460,19 +470,8 @@ var app = {
                             block.find('div.back>a').button();
                             detailsContainer.append(block).on('click', 'a.pdf', function (e) {
                                 e.preventDefault();
-                                var $this = $(this),
-                                    theme = $this.jqmData("theme") || $.mobile.loader.prototype.options.theme,
-                                    msgText = $this.jqmData("msgtext") || $.mobile.loader.prototype.options.text,
-                                    textVisible = $this.jqmData("textvisible") || $.mobile.loader.prototype.options.textVisible,
-                                    textonly = !!$this.jqmData("textonly");
-                                html = $this.jqmData("html") || "";
-                                $.mobile.loading("show", {
-                                    text: msgText,
-                                    textVisible: textVisible,
-                                    theme: theme,
-                                    textonly: textonly,
-                                    html: html
-                                });
+                                $('.loader').show()
+                                $('.list-content').css('opacity',0.5)
                                 console.log('works');
                                 app.openPdf(this.href)
                             });;
