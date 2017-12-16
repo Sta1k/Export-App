@@ -288,12 +288,12 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.4.1-dev",
     "cordova-plugin-statusbar": "2.2.0",
     "cordova-plugin-document-viewer": "0.6.0",
-    "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-file": "4.3.1",
     "cordova-plugin-file-transfer": "1.6.1",
     "cordova-open": "1.0.12",
     "cordova-plugin-device": "1.1.4",
-    "cordova-plugin-file-opener2": "2.0.19"
+    "cordova-plugin-file-opener2": "2.0.19",
+    "cordova-plugin-compat": "1.2.0"
 }
 // BOTTOM OF METADATA
 });

@@ -37,6 +37,10 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"FileOpener2\"><param name=\"android-package\" value=\"io.github.pwlin.cordova.plugins.fileopener2.FileOpener2\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
               "count": 1
             },
@@ -54,10 +58,6 @@
             },
             {
               "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"FileOpener2\"><param name=\"android-package\" value=\"io.github.pwlin.cordova.plugins.fileopener2.FileOpener2\" /></feature>",
               "count": 1
             }
           ]
@@ -90,9 +90,6 @@
     }
   },
   "installed_plugins": {
-    "cordova-plugin-compat": {
-      "PACKAGE_NAME": "ihk.export.app"
-    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "ihk.export.app"
     },
@@ -111,6 +108,9 @@
     "cordova-plugin-document-viewer": {
       "PACKAGE_NAME": "ihk.export.app"
     },
+    "cordova-plugin-file-opener2": {
+      "PACKAGE_NAME": "ihk.export.app"
+    },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "ihk.export.app"
     },
@@ -124,9 +124,6 @@
       "PACKAGE_NAME": "ihk.export.app"
     },
     "cordova-plugin-x-toast": {
-      "PACKAGE_NAME": "ihk.export.app"
-    },
-    "cordova-plugin-file-opener2": {
       "PACKAGE_NAME": "ihk.export.app"
     }
   },
@@ -363,6 +360,14 @@
       ]
     },
     {
+      "id": "cordova-plugin-file-opener2.FileOpener2",
+      "file": "plugins/cordova-plugin-file-opener2/www/plugins.FileOpener2.js",
+      "pluginId": "cordova-plugin-file-opener2",
+      "clobbers": [
+        "cordova.plugins.fileOpener2"
+      ]
+    },
+    {
       "id": "cordova-plugin-inappbrowser.inappbrowser",
       "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
       "pluginId": "cordova-plugin-inappbrowser",
@@ -414,29 +419,20 @@
       "id": "cordova-plugin-x-toast.tests",
       "file": "plugins/cordova-plugin-x-toast/test/tests.js",
       "pluginId": "cordova-plugin-x-toast"
-    },
-    {
-      "id": "cordova-plugin-file-opener2.FileOpener2",
-      "file": "plugins/cordova-plugin-file-opener2/www/plugins.FileOpener2.js",
-      "pluginId": "cordova-plugin-file-opener2",
-      "clobbers": [
-        "cordova.plugins.fileOpener2"
-      ]
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-file": "4.3.1",
     "cordova-plugin-file-transfer": "1.6.1",
     "cordova-open": "1.0.12",
     "cordova-plugin-device": "1.1.4",
     "cordova-plugin-dialogs": "1.2.1",
     "cordova-plugin-document-viewer": "0.6.0",
+    "cordova-plugin-file-opener2": "2.0.19",
     "cordova-plugin-inappbrowser": "1.4.1-dev",
     "cordova-plugin-network-information": "1.2.0",
     "cordova-plugin-statusbar": "2.2.0",
     "cordova-plugin-whitelist": "1.2.1",
-    "cordova-plugin-x-toast": "2.5.0",
-    "cordova-plugin-file-opener2": "2.0.19"
+    "cordova-plugin-x-toast": "2.5.0"
   }
 }

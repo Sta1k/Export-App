@@ -9,12 +9,14 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-file-opener2": {},
-      "cordova-open": {}
+      "cordova-open": {},
+      "cordova-plugin-compat": {}
     }
   },
   "dependencies": {
-    "cordova-android": "~6.2.3",
+    "cordova-android": "^6.3.0",
     "cordova-open": "~1.0.12",
+    "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-file-opener2": "^2.0.19",
     "cordova-plugin-whitelist": "1",
     "jquery-mobile": "^1.5.0-alpha.1"

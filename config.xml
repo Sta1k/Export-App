@@ -81,8 +81,9 @@
     </platform>
     <preference name="Orientation" value="portrait" />
     <allow-navigation href="*://export-app.de/*" />
-    <engine name="android" spec="~6.2.3" />
+    <engine name="android" spec="^6.3.0" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
     <plugin name="cordova-open" spec="~1.0.12" />
+    <plugin name="cordova-plugin-compat" spec="^1.2.0" />
 </widget>

@@ -1,4 +1,5 @@
 var app = {
+    platform:'',
     manufacturer: '',
     dataService: '',
     apiUrl: 'http://export-app.de/api/?q=list',
@@ -45,9 +46,27 @@ var app = {
         $("li.lightblue a").click(function () {
             $(this).next("ul .sub-menu").toggle();
         });
-
-        $(document).on('click', 'p a.pdf', function (e) {
+        $( document ).on( "mobileinit", function() {
+            $.mobile.loader.prototype.options.text = "loading";
+            $.mobile.loader.prototype.options.textVisible = false;
+            $.mobile.loader.prototype.options.theme = "a";
+            $.mobile.loader.prototype.options.html = "";
+          });
+        $(document).on('click', 'a.pdf', function (e) {
             e.preventDefault();
+            var $this = $(this),
+                theme = $this.jqmData("theme") || $.mobile.loader.prototype.options.theme,
+                msgText = $this.jqmData("msgtext") || $.mobile.loader.prototype.options.text,
+                textVisible = $this.jqmData("textvisible") || $.mobile.loader.prototype.options.textVisible,
+                textonly = !!$this.jqmData("textonly");
+            html = $this.jqmData("html") || "";
+            $.mobile.loading("show", {
+                text: msgText,
+                textVisible: textVisible,
+                theme: theme,
+                textonly: textonly,
+                html: html
+            });
             console.log('works');
             app.openPdf(this.href)
         });
@@ -149,6 +168,7 @@ var app = {
     onDeviceReady: function () {
         app.initDb();
         app.manufacturer = device.manufacturer;
+        app.platform=device.platform;
         $('body').removeClass('hidden');
     },
 
@@ -327,19 +347,73 @@ var app = {
         });
     },
     openPdf: function (url) {
+        // var tp;
+        // if (app.platform == 'iOS') {
+        //     tp = cordova.file.cacheDirectory + url.substr(url.lastIndexOf('/') + 1)
+        // } else {
+        //     tp = cordova.file.externalDataDirectory + url.substr(url.lastIndexOf('/') + 1)
+        // }
         // e.preventDefault();
         function pdfSuccess() {
+            $('.list-content').css('opacity',1)
+            $('.loader').hide()
             console.log('Success');
         }
 
         function pdfError(code) {
+            $('.list-content').css('opacity',1)
+            $('.loader').hide()
             if (code === 1) {
                 console.log('No file handler found');
             } else {
                 console.log('Undefined error', code);
             }
+            window.plugins.toast.showShortTop("Undefined error")
         }
-        console.log(url)
+        // console.log(app.platform)
+        
+        // var fileTransfer = new FileTransfer(),
+
+        //     args = {
+        //         uri: encodeURI(url),
+        //         name: url.substr(url.lastIndexOf('/') + 1),
+        //         //  statusDom=document.getElementById("ft-prog")
+        //         targetPath: tp
+        //     }
+        // console.log(args)
+        // fileTransfer.download(
+        //     args.uri,
+        //     args.targetPath,
+        //     function (entry) {
+        //         console.log("download complete: " + entry.toURL());
+        //         window.resolveLocalFileSystemURL(args.targetPath, function (entry) {
+        //             cordova.plugins.fileOpener2.open(
+        //                 entry.toURL(),
+        //                 'application/pdf', {
+        //                     error: function (e) {
+        //                         $.mobile.loading("hide");
+        //                         console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
+        //                     },
+        //                     success: function () {
+        //                         $.mobile.loading("hide");
+        //                         console.log('file opened successfully');
+        //                     }
+        //                 }
+        //             );
+        //         }, function (e) {
+        //             $.mobile.loading("hide");
+        //             console.log('File Not Found');
+        //         });
+        //     },
+        //     function (error) {
+        //         $.mobile.loading("hide");
+        //         console.log("download error source " + error.source);
+        //         console.log("download error target " + error.target);
+        //         console.log("upload error code" + error.code);
+        //     },
+        //     true,
+        //     args.options
+        // );
         cordova.plugins.disusered.open(url, pdfSuccess, pdfError)
     },
 
@@ -354,7 +428,7 @@ var app = {
                     //console.log(data);
                     if (data.rows.length) {
                         var word = data.rows.item(0);
-                        console.log('without replace');
+                        // console.log('without replace');
                         $.get('views/_wordDetails.html', function (template) {
                             var detailsContainer = $('#details');
                             detailsContainer.html('');
@@ -362,25 +436,46 @@ var app = {
                             block.find('div#detailsTitle').text(word.title);
                             block.find('div#detailsDesc').html(word.desc_short);
 
-                            block.find('div#detailsDescFull').html(word.desc_full);
+
                             console.log(word);
                             if (JSON.parse(word.pdf).length > 0) {
                                 // console.log(word.pdf);
                                 var pdfArr = JSON.parse(word.pdf);
                                 console.log(pdfArr);
                                 // var pdfLinks = word.pdf.split(',');
-
+                                var result;
                                 for (var i = 0; i < pdfArr.length; i++) {
-                                    // block.find('div#pdf').append($('<p><a class="pdf" href="'+encodeURI(pdfArr[i].url)+'">' + pdfArr[i].name + '</a></p>'));
-                                    block.find('div#pdf').append($('<p><a class="pdf" href="' + pdfArr[i].url + '">' + pdfArr[i].name + '</a></p>'));
-                                }
+                                    var work = result || word.desc_full;
+                                    var matched = work.lastIndexOf(pdfArr[i].name + '</a'),
+                                        start = work.substring(0, matched),
+                                        tale = work.slice(matched + pdfArr[i].name.length + 4),
+                                        startFind = start.lastIndexOf('<a');
+                                    //    console.log(tale)
+                                    result = work.replace(work.substring(startFind, matched + pdfArr[i].name.length + 4), '<a class="pdf" data-textonly="false" data-textvisible="true" data-msgtext="Wird geladen" data-inline="true" href="' + pdfArr[i].url + '">' + pdfArr[i].name + '</a>')
 
+                                    //    pattern.test(start)
+                                    console.log('\n---->', result)
+
+                                    // block.find('div#pdf').append($('<p><a class="pdf" href="'+encodeURI(pdfArr[i].url)+'">' + pdfArr[i].name + '</a></p>'));
+                                    // block.find('div#pdf').append($('<a class="pdf" data-textonly="true" data-textvisible="true" data-msgtext="Wird geladen" data-inline="true" href="' + pdfArr[i].url + '">' + pdfArr[i].name + '</a>'));
+                                }
+                                block.find('div#detailsDescFull').html(result);
+                            } else {
+                                block.find('div#detailsDescFull').html(word.desc_full);
                             }
+
                             if (word.external_link) {
                                 block.find('div.links').append($('<a href="' + word.external_link + '" class="externalLink">Video</a>'));
                             }
                             block.find('div.back>a').button();
-                            detailsContainer.append(block);
+                            detailsContainer.append(block).on('click', 'a.pdf', function (e) {
+                                e.preventDefault();
+                                $('.loader').show()
+                                $('.list-content').css('opacity',0.5)
+                                console.log('works');
+                                app.openPdf(this.href)
+                            });;
+
                             app.openPage('.page#detailsContainer');
                             window.scrollTo(0, 0);
                         });

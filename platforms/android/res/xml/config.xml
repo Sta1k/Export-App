@@ -20,6 +20,9 @@
     <feature name="SitewaertsDocumentViewer">
         <param name="android-package" value="de.sitewaerts.cordova.documentviewer.DocumentViewerPlugin" />
     </feature>
+    <feature name="FileOpener2">
+        <param name="android-package" value="io.github.pwlin.cordova.plugins.fileopener2.FileOpener2" />
+    </feature>
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
@@ -36,9 +39,6 @@
     </feature>
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
-    </feature>
-    <feature name="FileOpener2">
-        <param name="android-package" value="io.github.pwlin.cordova.plugins.fileopener2.FileOpener2" />
     </feature>
     <name>Export App</name>
     <description>

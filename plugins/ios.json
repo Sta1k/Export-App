@@ -39,12 +39,12 @@
     },
     "cordova-plugin-file-opener2": {
       "PACKAGE_NAME": "ihk.export.app"
+    },
+    "cordova-plugin-compat": {
+      "PACKAGE_NAME": "ihk.export.app"
     }
   },
   "dependent_plugins": {
-    "cordova-plugin-compat": {
-      "PACKAGE_NAME": "ihk.export.app"
-    },
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "ihk.export.app"
     }
